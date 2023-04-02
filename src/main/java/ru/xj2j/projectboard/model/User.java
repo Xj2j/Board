@@ -1,6 +1,9 @@
 package ru.xj2j.projectboard.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,9 +18,14 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "usr")
+@Table(	name = "users",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "email")
+        })
 @Entity
 public class User implements UserDetails {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,12 +37,17 @@ public class User implements UserDetails {
 
     private String surname;
 
+    @NotBlank
+    @Size(max = 50)
+    @Email
     private String email;
 
     private String phone;
 
     //private String login;
 
+    @NotBlank
+    @Size(max = 120)
     private String password;
 
     //@ManyToOne(fetch = FetchType.LAZY)
