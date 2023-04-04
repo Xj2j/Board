@@ -2,32 +2,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
-    <groupId>ru.xj2j</groupId>
-    <artifactId>project-board</artifactId>
-    <packaging>pom</packaging>
-    <version>0.0.1-SNAPSHOT</version>
-
-    <name>project-board</name>
-    <description>project-board</description>
-
-    <modules>
-        <module>frontend</module>
-        <module>backend</module>
-    </modules>
-
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.0.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-
+    <groupId>ru.xj2j</groupId>
+    <artifactId>backend</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>backend</name>
+    <description>backend module for project-board</description>
     <properties>
         <java.version>19</java.version>
-        <main.basedir>${project.basedir}</main.basedir>
     </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -139,7 +127,12 @@
                             <outputDirectory>${basedir}/target/dist</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${basedir}/../client/build</directory>
+                                    <directory>${basedir}/frontend/target/dist</directory>
+                                    <includes>
+                                        <include>static/</include>
+                                        <include>index.html</include>
+                                        <include>favicon.ico</include>
+                                    </includes>
                                 </resource>
                             </resources>
                         </configuration>
