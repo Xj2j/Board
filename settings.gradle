@@ -1,2 +1,7 @@
 rootProject.name = 'Board'
 
+includeBuild 'board-server'
+includeBuild 'config-server'
+includeBuild 'board-gateway'
+includeBuild 'auth-service'
+includeBuild 'board-entity'
