@@ -30,9 +30,9 @@ public class Page extends ProjectBaseModel {
     @Column(name = "description_stripped")
     private String descriptionStripped;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    /*@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owned_by")
-    private User ownedBy;
+    private User ownedBy;*/
 
     @Column(name = "access")
     private Integer access;

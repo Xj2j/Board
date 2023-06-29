@@ -1,4 +1,4 @@
-package ru.xj2j.board.entity;
+package ru.xj2j.board.userteamservice.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

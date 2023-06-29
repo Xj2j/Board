@@ -1,14 +1,17 @@
-package ru.xj2j.board.entity;
+package ru.xj2j.board.userteamservice.entity;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
 @Entity
 @Table(name = "social_login_connections")
+@NoArgsConstructor
+@AllArgsConstructor
 public class SocialLoginConnection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

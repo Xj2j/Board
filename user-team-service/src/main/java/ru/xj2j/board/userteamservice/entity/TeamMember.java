@@ -1,4 +1,4 @@
-package ru.xj2j.board.entity;
+package ru.xj2j.board.userteamservice.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -9,9 +9,9 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "workspace_member_invites")
+@Table(name = "team_members")
 @EntityListeners(AuditingEntityListener.class)
-public class WorkspaceMemberInvite {
+public class TeamMember {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,20 +21,13 @@ public class WorkspaceMemberInvite {
     @JoinColumn(name = "workspace_id", referencedColumnName = "id", nullable = false)
     private Workspace workspace;
 
-    @Column(name = "email", nullable = false)
-    private String email;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "team_id", referencedColumnName = "id", nullable = false)
+    private Team team;
 
-    @Column(name = "accepted", nullable = false)
-    private Boolean accepted;
-
-    @Column(name = "token", nullable = false)
-    private String token;
-
-    @Column(name = "message")
-    private String message;
-
-    @Column(name = "responded_at")
-    private LocalDateTime respondedAt;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", referencedColumnName = "id", nullable = false)
+    private User member;
 
     @Column(name = "role", nullable = false)
     private Integer role;
@@ -45,6 +38,6 @@ public class WorkspaceMemberInvite {
 
     @Override
     public String toString() {
-        return workspace.getName() + " " + email + " " + accepted;
+        return member.getEmail() + " <" + team.getName() + ">";
     }
 }

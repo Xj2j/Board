@@ -1,24 +1,22 @@
-package ru.xj2j.board.entity;
+package ru.xj2j.board.userteamservice.entity;
 
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.util.StringUtils;
+
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
-
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import java.util.UUID;
 
 
+//@EntityListeners(AuditingEntityListener.class)
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Table(name = "users")
-public class User implements Serializable, UserDetails {
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true, updatable = false)
@@ -38,6 +36,9 @@ public class User implements Serializable, UserDetails {
 
     @Column(name = "last_name")
     private String lastName;
+
+    @Column(name = "sur_name")
+    private String surname;
 
     @Column(name = "avatar")
     private String avatar;
@@ -142,33 +143,20 @@ public class User implements Serializable, UserDetails {
     @Column(name = "theme", columnDefinition = "jsonb")
     private String theme;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+    @PrePersist
+    public void prePersist() {
+        if (StringUtils.hasText(email)) {
+            email = email.toLowerCase().trim();
+        }
+
+        if (StringUtils.hasText((CharSequence) tokenUpdatedAt)) {
+            token = UUID.randomUUID().toString().replaceAll("-", "");
+            tokenUpdatedAt = new Date();
+        }
+
+        if (isSuperuser) {
+            isStaff = true;
+        }
     }
 
-    @Override
-    public String getPassword() {
-        return null;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return false;
-    }
 }

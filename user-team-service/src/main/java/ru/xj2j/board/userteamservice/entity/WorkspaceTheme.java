@@ -1,16 +1,14 @@
-package ru.xj2j.board.entity;
+package ru.xj2j.board.userteamservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import jakarta.persistence.*;
+import ru.xj2j.board.userteamservice.JsonConverter;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,9 +16,13 @@ import java.util.Map;
 @Entity
 @Table(name = "workspace_themes")
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true) // наследуем equals() и hashCode() от BaseModel
+//@EqualsAndHashCode(callSuper = true) // наследуем equals() и hashCode() от BaseModel
 @ToString(callSuper = true) // наследуем toString() от BaseModel
-public class WorkspaceTheme extends BaseModel {
+public class WorkspaceTheme {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "workspace_id", nullable = false)

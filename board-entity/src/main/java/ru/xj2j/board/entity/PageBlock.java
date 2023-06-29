@@ -6,14 +6,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.jsoup.Jsoup;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
-
-@Data
 @Entity
 @Table(name = "page_blocks")
+@Data @NoArgsConstructor @AllArgsConstructor
+@EqualsAndHashCode(callSuper=false)
 public class PageBlock extends ProjectBaseModel {
 
     @JsonIgnore
@@ -32,9 +33,11 @@ public class PageBlock extends ProjectBaseModel {
     @Transient
     private String descriptionStripped;
 
-    @JsonIgnore
+    /*@JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    private Issue issue;
+    private IssueDTO issue;*/
+
+    private int issueId;
 
     private LocalDateTime completedAt;
 
@@ -68,6 +71,29 @@ public class PageBlock extends ProjectBaseModel {
             }
         }
     } */
+
+    /**@PrePersist
+    public void prePersist() {
+        if (this.sortOrder == null) {
+            Long largestSortOrder = this.page.getPageBlocks().stream()
+                    .mapToLong(PageBlock::getSortOrder)
+                    .max()
+                    .orElse(0L);
+            this.sortOrder = largestSortOrder + 10000;
+        }
+        if (this.descriptionHtml != null && !this.descriptionHtml.isEmpty()) {
+            this.descriptionStripped = Jsoup.parse(this.descriptionHtml).text();
+        }
+        if (this.completedAt != null && this.issueId != null) {
+            State completedState = this.project.getStates().stream()
+                    .filter(state -> state.getGroup().equals("completed"))
+                    .findFirst()
+                    .orElse(null);
+            if (completedState != null) {
+                this.issue.setState(completedState);
+            }
+        }
+    }*/
 
     @Override
     public String toString() {

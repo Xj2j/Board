@@ -1,4 +1,4 @@
-package ru.xj2j.board.entity;
+package ru.xj2j.board.userteamservice;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

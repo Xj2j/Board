@@ -1,16 +1,19 @@
-package ru.xj2j.board.entity;
+package ru.xj2j.board.userteamservice.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
+//@EntityListeners(AuditingEntityListener.class)
 @Data
 @Entity
 @Table(name = "workspaces")
-@EntityListeners(AuditingEntityListener.class)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Workspace {
 
     @Id
@@ -26,9 +29,6 @@ public class Workspace {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", referencedColumnName = "id", nullable = false)
     private User owner;
-
-    @Column(name = "slug", nullable = false, unique = true)
-    private String slug;
 
     @Column(name = "company_size", nullable = false)
     private Integer companySize;

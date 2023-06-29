@@ -35,7 +35,6 @@
             </builds>
           </compositeBuild>
         </compositeConfiguration>
-        <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
@@ -49,7 +48,6 @@
         </option>
       </GradleProjectSettings>
       <GradleProjectSettings>
-        <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$/auth-service" />
         <option name="modules">
           <set>
@@ -58,7 +56,6 @@
         </option>
       </GradleProjectSettings>
       <GradleProjectSettings>
-        <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$/board-entity" />
         <option name="modules">
           <set>
@@ -67,7 +64,6 @@
         </option>
       </GradleProjectSettings>
       <GradleProjectSettings>
-        <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$/board-gateway" />
         <option name="modules">
           <set>
@@ -76,7 +72,6 @@
         </option>
       </GradleProjectSettings>
       <GradleProjectSettings>
-        <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$/board-server" />
         <option name="modules">
           <set>
@@ -85,11 +80,34 @@
         </option>
       </GradleProjectSettings>
       <GradleProjectSettings>
-        <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$/config-server" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$/config-server" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/page-service" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/page-service" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/project-issue-service" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/project-issue-service" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/user-team-service" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/user-team-service" />
           </set>
         </option>
       </GradleProjectSettings>
