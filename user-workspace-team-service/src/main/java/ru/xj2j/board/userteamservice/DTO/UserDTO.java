@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+public class UserDTO {
 
     @JsonProperty("id")
     private Long id;
@@ -26,7 +26,7 @@ public class UserDto {
     private boolean isOnboarded;
 
     @JsonProperty("workspace")
-    private WorkspaceDto workspace;
+    private WorkspaceDTO workspace;
 
     /*@JsonProperty("issues")
     private IssuesDto issues = new IssuesDto();*/

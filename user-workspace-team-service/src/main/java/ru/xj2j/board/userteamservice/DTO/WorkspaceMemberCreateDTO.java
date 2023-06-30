@@ -9,7 +9,7 @@ import ru.xj2j.board.userteamservice.entity.Workspace;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class WorkspaceMemberCreateDto {
+public class WorkspaceMemberCreateDTO {
     private Long id;
     private Workspace workspace;
     private User member;

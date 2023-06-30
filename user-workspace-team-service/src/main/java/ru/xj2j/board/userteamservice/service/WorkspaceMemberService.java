@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import ru.xj2j.board.userteamservice.DTO.WorkspaceMemberCreateDto;
-import ru.xj2j.board.userteamservice.DTO.WorkspaceMemberDto;
-import ru.xj2j.board.userteamservice.DTO.WorkspaceMemberUpdateDto;
+import ru.xj2j.board.userteamservice.DTO.WorkspaceMemberCreateDTO;
+import ru.xj2j.board.userteamservice.DTO.WorkspaceMemberDTO;
+import ru.xj2j.board.userteamservice.DTO.WorkspaceMemberUpdateDTO;
 import ru.xj2j.board.userteamservice.entity.User;
 import ru.xj2j.board.userteamservice.entity.Workspace;
 import ru.xj2j.board.userteamservice.entity.WorkspaceMember;
@@ -32,14 +32,14 @@ public class WorkspaceMemberService {
     private WorkspaceRepository workspaceRepository;
 
     //@Override
-    public List<WorkspaceMemberDto> getAllMembers(Long workspaceId) {
+    public List<WorkspaceMemberDTO> getAllMembers(Long workspaceId) {
         //List<WorkspaceMember> members = workSpaceMemberRepository.findByWorkspaceIdAndMember(workspaceId);
         List<WorkspaceMember> members = workspaceMemberRepository.findByWorkspaceId(workspaceId);
         return members.stream().map(WorkspaceMapper::toDto).collect(Collectors.toList());
     }
 
     //@Override
-    public WorkspaceMemberDto addMember(Long workspaceId, WorkspaceMemberCreateDto memberDto) {
+    public WorkspaceMemberDTO addMember(Long workspaceId, WorkspaceMemberCreateDTO memberDto) {
         Optional<User> userOpt = userRepository.findById(memberDto.getMember().getId());
         if (!userOpt.isPresent()) {
             return null;
@@ -60,7 +60,7 @@ public class WorkspaceMemberService {
     }
 
     //@Override
-    public WorkspaceMemberDto updateMember(Long workspaceId, Long memberId, WorkspaceMemberUpdateDto memberDto, User user) {
+    public WorkspaceMemberDTO updateMember(Long workspaceId, Long memberId, WorkspaceMemberUpdateDTO memberDto, User user) {
         Optional<WorkspaceMember> memberOpt = workspaceMemberRepository.findByIdAndWorkspaceId(memberId, workspaceId);
         if (!memberOpt.isPresent()) {
             return null;

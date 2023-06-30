@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.xj2j.board.userteamservice.DTO.WorkspaceMemberCreateDto;
-import ru.xj2j.board.userteamservice.DTO.WorkspaceMemberDto;
-import ru.xj2j.board.userteamservice.DTO.WorkspaceMemberUpdateDto;
+import ru.xj2j.board.userteamservice.DTO.WorkspaceMemberCreateDTO;
+import ru.xj2j.board.userteamservice.DTO.WorkspaceMemberDTO;
+import ru.xj2j.board.userteamservice.DTO.WorkspaceMemberUpdateDTO;
 import ru.xj2j.board.userteamservice.entity.User;
 import ru.xj2j.board.userteamservice.service.WorkspaceMemberService;
 
@@ -20,14 +20,14 @@ public class WorkspaceMemberController {
     private WorkspaceMemberService workSpaceMemberService;
 
     @GetMapping
-    public List<WorkspaceMemberDto> getAllMembers(@PathVariable Long workspaceId) {
+    public List<WorkspaceMemberDTO> getAllMembers(@PathVariable Long workspaceId) {
         return workSpaceMemberService.getAllMembers(workspaceId);
     }
 
     @PostMapping
-    public ResponseEntity<WorkspaceMemberDto> addMember(@PathVariable Long workspaceId,
-                                                        @RequestBody WorkspaceMemberCreateDto memberDto) {
-        WorkspaceMemberDto addedMember = workSpaceMemberService.addMember(workspaceId, memberDto);
+    public ResponseEntity<WorkspaceMemberDTO> addMember(@PathVariable Long workspaceId,
+                                                        @RequestBody WorkspaceMemberCreateDTO memberDto) {
+        WorkspaceMemberDTO addedMember = workSpaceMemberService.addMember(workspaceId, memberDto);
         if (addedMember != null) {
             return new ResponseEntity<>(addedMember, HttpStatus.CREATED);
         }
@@ -35,11 +35,11 @@ public class WorkspaceMemberController {
     }
 
     @PatchMapping("/{memberId}")
-    public ResponseEntity<WorkspaceMemberDto> updateMember(@PathVariable Long workspaceId,
+    public ResponseEntity<WorkspaceMemberDTO> updateMember(@PathVariable Long workspaceId,
                                                            @PathVariable Long memberId,
-                                                           @RequestBody WorkspaceMemberUpdateDto memberDto,
+                                                           @RequestBody WorkspaceMemberUpdateDTO memberDto,
                                                            @AuthenticationPrincipal User user) {
-        WorkspaceMemberDto updatedMember = workSpaceMemberService.updateMember(workspaceId, memberId, memberDto, user);
+        WorkspaceMemberDTO updatedMember = workSpaceMemberService.updateMember(workspaceId, memberId, memberDto, user);
         if (updatedMember != null) {
             return new ResponseEntity<>(updatedMember, HttpStatus.OK);
         }

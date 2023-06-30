@@ -4,20 +4,20 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.xj2j.board.userteamservice.entity.User;
+import ru.xj2j.board.userteamservice.entity.Workspace;
 
 import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class WorkspaceDto {
+public class WorkspaceMemberUpdateDTO {
 
     private Long id;
-    //private String slug;
-    private String name;
-    private String logo;
-    //private String description;
-    private User owner;
-    private Integer companySize;
+    private Workspace workspace;
+    private User member;
+    private Integer role;
+    private String companyRole;
+    private String viewProps;
     private LocalDateTime createdAt;
 }

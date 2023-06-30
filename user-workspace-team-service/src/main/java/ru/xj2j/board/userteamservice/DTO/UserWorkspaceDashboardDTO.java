@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserWorkspaceDashboardDto {
+public class UserWorkspaceDashboardDTO {
 
     private List<ActivityCount> issueActivities;
     private List<CompletedCount> completedIssues;

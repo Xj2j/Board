@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.xj2j.board.userteamservice.DTO.UserDto;
-import ru.xj2j.board.userteamservice.DTO.WorkspaceDto;
+import ru.xj2j.board.userteamservice.DTO.UserDTO;
+import ru.xj2j.board.userteamservice.DTO.WorkspaceDTO;
 import ru.xj2j.board.userteamservice.entity.User;
 import ru.xj2j.board.userteamservice.entity.Workspace;
 import ru.xj2j.board.userteamservice.repository.UserRepository;
@@ -26,7 +26,7 @@ public class UserService {
     @Autowired
     private ObjectMapper objectMapper;
 
-    public UserDto getCurrentUser() throws NotFoundException {
+    public UserDTO getCurrentUser() throws NotFoundException {
         User currentUser = userRepository.findById(getUserId()).orElseThrow(() -> new NotFoundException("User not found"));
 
         Workspace workspace = currentUser.getLastWorkspaceId() != null ? workspaceRepository.findById(currentUser.getLastWorkspaceId()).orElse(null) : null;
@@ -38,8 +38,8 @@ public class UserService {
         int invitesCount = workspaceMemberInviteRepository.countByEmail(currentUser.getEmail());
         int assignedIssuesCount = issueRepository.countByAssigneesIn(Collections.singletonList(currentUser));
 
-        UserDto userDto = objectMapper.convertValue(currentUser, UserDto.class);
-        userDto.setWorkspace(new WorkspaceDto(currentUser.getLastWorkspaceId(), lastWorkspaceSlug, fallbackWorkspace.getId(), fallbackWorkspaceSlug, invitesCount));
+        UserDTO userDto = objectMapper.convertValue(currentUser, UserDTO.class);
+        userDto.setWorkspace(new WorkspaceDTO(currentUser.getLastWorkspaceId(), lastWorkspaceSlug, fallbackWorkspace.getId(), fallbackWorkspaceSlug, invitesCount));
         userDto.getIssues().setAssignedIssues(assignedIssuesCount);
 
         return userDto;

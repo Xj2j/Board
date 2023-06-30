@@ -2,13 +2,11 @@ package ru.xj2j.board.userteamservice.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
-import ru.xj2j.board.userteamservice.DTO.WorkspaceDto;
-import ru.xj2j.board.userteamservice.DTO.WorkspaceMemberCreateDto;
-import ru.xj2j.board.userteamservice.DTO.WorkspaceMemberDto;
+import ru.xj2j.board.userteamservice.DTO.WorkspaceDTO;
+import ru.xj2j.board.userteamservice.DTO.WorkspaceMemberCreateDTO;
+import ru.xj2j.board.userteamservice.DTO.WorkspaceMemberDTO;
 import ru.xj2j.board.userteamservice.entity.Workspace;
 import ru.xj2j.board.userteamservice.entity.WorkspaceMember;
-
-import java.util.Optional;
 
 @Component
 public class WorkspaceMapper {
@@ -19,12 +17,12 @@ public class WorkspaceMapper {
         this.objectMapper = objectMapper;
     }
 
-    public WorkspaceDto toDto(Workspace workspace) {
-        return objectMapper.convertValue(workspace, WorkspaceDto.class);
+    public WorkspaceDTO toDto(Workspace workspace) {
+        return objectMapper.convertValue(workspace, WorkspaceDTO.class);
     }
 
-    public static WorkspaceMemberDto toDto(WorkspaceMember entity) {
-        WorkspaceMemberDto dto = new WorkspaceMemberDto();
+    public static WorkspaceMemberDTO toDto(WorkspaceMember entity) {
+        WorkspaceMemberDTO dto = new WorkspaceMemberDTO();
         dto.setId(entity.getId());
         dto.getMember().setId(entity.getMember().getId());
         dto.setRole(entity.getRole());
@@ -32,7 +30,7 @@ public class WorkspaceMapper {
         return dto;
     }
 
-    public static WorkspaceMember toEntity(WorkspaceMemberCreateDto dto) {
+    public static WorkspaceMember toEntity(WorkspaceMemberCreateDTO dto) {
         WorkspaceMember entity = new WorkspaceMember();
         entity.setRole(dto.getRole());
         entity.getMember().setIsActive(dto.getMember().getIsActive());

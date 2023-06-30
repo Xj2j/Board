@@ -19,4 +19,8 @@ public interface WorkspaceRepository extends JpaRepository<Workspace, Long> {
             "INNER JOIN User u ON wm.userId=u.id " +
             "WHERE u.email=:userEmail")*/
     List<Workspace> findByUserEmail(String userEmail);
+
+    boolean existsById(Long id);
+
+    List<Workspace> findByOwner(String owner);
 }
