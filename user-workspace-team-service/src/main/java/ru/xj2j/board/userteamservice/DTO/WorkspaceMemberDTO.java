@@ -1,10 +1,12 @@
 package ru.xj2j.board.userteamservice.DTO;
 
+import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.xj2j.board.userteamservice.entity.User;
 import ru.xj2j.board.userteamservice.entity.Workspace;
+import ru.xj2j.board.userteamservice.entity.WorkspaceMember;
 
 import java.time.LocalDateTime;
 
@@ -14,10 +16,11 @@ import java.time.LocalDateTime;
 public class WorkspaceMemberDTO {
 
     private Long id;
-    private Workspace workspace;
-    private User member;
-    private Integer role;
+    private WorkspaceDTO workspace;
+    private UserDTO member;
+    private String role;
     private String companyRole;
     private String viewProps;
     private LocalDateTime createdAt;
+
 }

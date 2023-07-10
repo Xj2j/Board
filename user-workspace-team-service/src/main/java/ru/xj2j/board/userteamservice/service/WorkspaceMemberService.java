@@ -6,10 +6,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import ru.xj2j.board.userteamservice.DTO.WorkspaceMemberCreateDTO;
 import ru.xj2j.board.userteamservice.DTO.WorkspaceMemberDTO;
-import ru.xj2j.board.userteamservice.DTO.WorkspaceMemberUpdateDTO;
 import ru.xj2j.board.userteamservice.entity.User;
 import ru.xj2j.board.userteamservice.entity.Workspace;
 import ru.xj2j.board.userteamservice.entity.WorkspaceMember;
+import ru.xj2j.board.userteamservice.exception.WorkspaceNotFoundException;
 import ru.xj2j.board.userteamservice.repository.UserRepository;
 import ru.xj2j.board.userteamservice.repository.WorkspaceMemberRepository;
 import ru.xj2j.board.userteamservice.repository.WorkspaceRepository;
@@ -22,23 +22,37 @@ import java.util.stream.Collectors;
 @Service
 public class WorkspaceMemberService {
 
-    @Autowired
     private WorkspaceMemberRepository workspaceMemberRepository;
 
-    @Autowired
     private UserRepository userRepository;
 
-    @Autowired
     private WorkspaceRepository workspaceRepository;
 
-    //@Override
+    private WorkspaceMapper workspaceMapper;
+
+    @Autowired
+    public WorkspaceMemberService(WorkspaceMemberRepository workspaceMemberRepository, UserRepository userRepository, WorkspaceRepository workspaceRepository, WorkspaceMapper workspaceMapper) {
+        this.workspaceMemberRepository = workspaceMemberRepository;
+        this.userRepository = userRepository;
+        this.workspaceRepository = workspaceRepository;
+        this.workspaceMapper = workspaceMapper;
+    }
+
+    public WorkspaceMember getWorkspaceMemberByWorkspaceIdAndMemberEmail(Long workspaceId, String email) throws WorkspaceNotFoundException {
+        return workspaceMemberRepository.findByWorkspaceIdAndMemberEmail(workspaceId, email)
+                .orElseThrow(() -> new WorkspaceNotFoundException("Workspace member not found with id: " + workspaceId + " and email: " + email));
+    }
+
+    public List<WorkspaceMember> getWorkspaceMembersByWorkspaceIdAndMemberEmails(Long workspaceId, List<String> emails) {
+        return workspaceMemberRepository.findByWorkspaceIdAndMemberEmailIn(workspaceId, emails);
+    }
+
     public List<WorkspaceMemberDTO> getAllMembers(Long workspaceId) {
         //List<WorkspaceMember> members = workSpaceMemberRepository.findByWorkspaceIdAndMember(workspaceId);
         List<WorkspaceMember> members = workspaceMemberRepository.findByWorkspaceId(workspaceId);
-        return members.stream().map(WorkspaceMapper::toDto).collect(Collectors.toList());
+        return members.stream().map(workspaceMapper::toDto).collect(Collectors.toList());
     }
 
-    //@Override
     public WorkspaceMemberDTO addMember(Long workspaceId, WorkspaceMemberCreateDTO memberDto) {
         Optional<User> userOpt = userRepository.findById(memberDto.getMember().getId());
         if (!userOpt.isPresent()) {
@@ -52,15 +66,14 @@ public class WorkspaceMemberService {
 
         Workspace workspace = workspaceOpt.get();
 
-        WorkspaceMember newMember = WorkspaceMapper.toEntity(memberDto);
+        WorkspaceMember newMember = workspaceMapper.toEntity(memberDto);  //WorkspaceMapper.toEntity(memberDto);
         newMember.setWorkspace(workspace);
         newMember.setMember(userOpt.get());
         WorkspaceMember savedMember = workspaceMemberRepository.save(newMember);
-        return WorkspaceMapper.toDto(savedMember);
+        return workspaceMapper.toDto(savedMember);
     }
 
-    //@Override
-    public WorkspaceMemberDTO updateMember(Long workspaceId, Long memberId, WorkspaceMemberUpdateDTO memberDto, User user) {
+    public WorkspaceMemberDTO updateMember(Long workspaceId, Long memberId, WorkspaceMemberDTO memberDto, User user) {
         Optional<WorkspaceMember> memberOpt = workspaceMemberRepository.findByIdAndWorkspaceId(memberId, workspaceId);
         if (!memberOpt.isPresent()) {
             return null;
@@ -72,17 +85,16 @@ public class WorkspaceMemberService {
         }
 
         Optional<WorkspaceMember> requesterOpt = workspaceMemberRepository.findByWorkspaceIdAndMember(workspaceId, user);
-        if (!requesterOpt.isPresent() || requesterOpt.get().getRole() < memberDto.getRole()) {
+        if (!requesterOpt.isPresent() || requesterOpt.get().getRole().compareTo(member.getRole()) > 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You cannot update a role that is higher than your own role");
         }
 
         member.setRole(memberDto.getRole());
         member.getMember().setIsActive(memberDto.getMember().getIsActive());
         WorkspaceMember updatedMember = workspaceMemberRepository.save(member);
-        return WorkspaceMapper.toDto(updatedMember);
+        return workspaceMapper.toDto(updatedMember);
     }
 
-    //@Override
     public boolean deleteMember(Long workspaceId, Long memberId, User user) {
         Optional<WorkspaceMember> memberOpt = workspaceMemberRepository.findByIdAndWorkspaceId(memberId, workspaceId);
         if (!memberOpt.isPresent()) {
@@ -91,7 +103,7 @@ public class WorkspaceMemberService {
         WorkspaceMember member = memberOpt.get();
 
         Optional<WorkspaceMember> requesterOpt = workspaceMemberRepository.findByWorkspaceIdAndMember(workspaceId, user);
-        if (!requesterOpt.isPresent() || requesterOpt.get().getRole() < member.getRole()) {
+        if (!requesterOpt.isPresent() || requesterOpt.get().getRole().compareTo(member.getRole()) > 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You cannot delete a member with a higher role than your own");
         }
 

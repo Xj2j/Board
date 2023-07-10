@@ -11,7 +11,7 @@ import ru.xj2j.board.userteamservice.entity.Workspace;
 @AllArgsConstructor
 public class WorkspaceMemberCreateDTO {
     private Long id;
-    private Workspace workspace;
-    private User member;
-    private Integer role;
+    private WorkspaceDTO workspace;
+    private UserDTO member;
+    private String role;
 }

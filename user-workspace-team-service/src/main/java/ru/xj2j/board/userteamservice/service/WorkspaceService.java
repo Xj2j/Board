@@ -20,7 +20,7 @@ public class WorkspaceService {
     private WorkspaceRepository workspaceRepository;
 
     @Autowired
-    private WorkspaceMapper workSpaceMapper;
+    private WorkspaceMapper workspaceMapper;
 
     public WorkspaceDTO getWorkspaceById(Long workspaceId) throws ValidationException {
         Optional<Workspace> workspace = workspaceRepository.findById(workspaceId);
@@ -28,7 +28,7 @@ public class WorkspaceService {
             throw new ValidationException("Workspace not found");
         }
 
-        return workSpaceMapper.toDto(workspace.get());
+        return workspaceMapper.toDto(workspace.get());
     }
 
     public WorkspaceDTO create(WorkspaceDTO request, String owner) throws ValidationException {
@@ -38,27 +38,28 @@ public class WorkspaceService {
 
         Workspace workspace = new Workspace();
         workspace.setName(request.getName());
-        //workSpace.setDescription(request.getDescription());
-        workspace.setOwner(request.getOwner());
+        workspace.setOwner(workspaceMapper.toEntity(request.getOwner()));
         workspaceRepository.save(workspace);
 
-        return workSpaceMapper.toDto(workspace);
+        return workspaceMapper.toDto(workspace);
     }
 
-    public Workspace updateWorkspace(Long workspaceId, WorkspaceDTO workSpaceDTO) throws WorkspaceNotFoundException {
+    /*public WorkspaceDTO updateWorkspace(Long workspaceId, WorkspaceDTO workSpaceDTO) throws WorkspaceNotFoundException {
         Optional<Workspace> optionalWorkSpace = workspaceRepository.findById(workspaceId);
         if (optionalWorkSpace.isPresent()) {
-            Workspace workSpace = optionalWorkSpace.get();
+            Workspace workspace = optionalWorkSpace.get();
+
+            workspace.se
 
             // Обновляем свойства workSpace согласно workSpaceDTO...
 
-            workspaceRepository.save(workSpace);
+            workspaceRepository.save(workspace);
 
-            return workSpace;
+            return workSpaceMapper.toDto(workspace);
         } else {
-            throw new WorkspaceNotFoundException();
+            throw new WorkspaceNotFoundException("Workspace member not found with id: " + workspaceId);
         }
-    }
+    }*/
 
     public void deleteWorkspace(Long workspaceId) throws WorkspaceNotFoundException {
         Optional<Workspace> optionalWorkSpace = workspaceRepository.findById(workspaceId);
@@ -66,7 +67,7 @@ public class WorkspaceService {
             Workspace workSpace = optionalWorkSpace.get();
             workspaceRepository.delete(workSpace);
         } else {
-            throw new WorkspaceNotFoundException();
+            throw new WorkspaceNotFoundException("Workspace member not found with id: " + workspaceId);
         }
     }
 
@@ -74,7 +75,7 @@ public class WorkspaceService {
         List<Workspace> workSpaces = workspaceRepository.findByUserEmail(userEmail);
         List<WorkspaceDTO> workspaceDTOS = new ArrayList<>();
         for (Workspace workSpace : workSpaces) {
-            workspaceDTOS.add(workSpaceMapper.toDto(workSpace));
+            workspaceDTOS.add(workspaceMapper.toDto(workSpace));
         }
 
         return workspaceDTOS;

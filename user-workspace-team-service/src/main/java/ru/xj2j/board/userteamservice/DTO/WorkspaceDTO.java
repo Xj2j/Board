@@ -17,7 +17,7 @@ public class WorkspaceDTO {
     private String name;
     private String logo;
     //private String description;
-    private User owner;
-    private Integer companySize;
+    private UserDTO owner;
+    private int companySize;
     private LocalDateTime createdAt;
 }

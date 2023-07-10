@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.xj2j.board.userteamservice.DTO.WorkspaceMemberCreateDTO;
 import ru.xj2j.board.userteamservice.DTO.WorkspaceMemberDTO;
-import ru.xj2j.board.userteamservice.DTO.WorkspaceMemberUpdateDTO;
 import ru.xj2j.board.userteamservice.entity.User;
 import ru.xj2j.board.userteamservice.service.WorkspaceMemberService;
 
@@ -37,7 +36,7 @@ public class WorkspaceMemberController {
     @PatchMapping("/{memberId}")
     public ResponseEntity<WorkspaceMemberDTO> updateMember(@PathVariable Long workspaceId,
                                                            @PathVariable Long memberId,
-                                                           @RequestBody WorkspaceMemberUpdateDTO memberDto,
+                                                           @RequestBody WorkspaceMemberDTO memberDto,
                                                            @AuthenticationPrincipal User user) {
         WorkspaceMemberDTO updatedMember = workSpaceMemberService.updateMember(workspaceId, memberId, memberDto, user);
         if (updatedMember != null) {

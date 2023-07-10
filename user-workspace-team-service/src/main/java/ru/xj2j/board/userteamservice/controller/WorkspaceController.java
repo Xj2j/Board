@@ -64,7 +64,7 @@ public class WorkspaceController {
         }
     }
 
-    @PatchMapping("/{workspaceId}")
+    /*@PatchMapping("/{workspaceId}")
     public ResponseEntity<?> updateWorkSpace(@PathVariable("workspaceId") Long workspaceId, @Valid @RequestBody WorkspaceDTO workspaceDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bindingResult.getAllErrors());
@@ -78,7 +78,7 @@ public class WorkspaceController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something went wrong. Please try again later.");
         }
-    }
+    }*/
 
     @DeleteMapping("/{workspaceId}")
     public ResponseEntity<?> deleteWorkspace(@PathVariable("workspaceId") Long workspaceId) {
