@@ -11,13 +11,15 @@ import java.util.Optional;
 @Repository
 public interface WorkspaceMemberRepository extends JpaRepository<WorkspaceMember, Long> {
 
-    List<WorkspaceMember> findByWorkspaceId(Long id);
+    List<WorkspaceMember> findByWorkspaceId(Long workspaceId);
 
     Optional<WorkspaceMember> findByIdAndWorkspaceId(Long id, Long workspaceId);
 
-    Optional<WorkspaceMember> findByWorkspaceIdAndMember(Long id, User member);
+    Optional<WorkspaceMember> findByWorkspaceIdAndMember(Long workspaceId, User member);
 
-    Optional<WorkspaceMember> findByWorkspaceIdAndMemberEmail(Long id, String email);
+    Optional<WorkspaceMember> findByWorkspaceIdAndMemberEmail(Long workspaceId, String email);
 
-    List<WorkspaceMember> findByWorkspaceIdAndMemberEmailIn(Long id, List<String> emails);
+    List<WorkspaceMember> findByWorkspaceIdAndMemberEmailIn(Long workspaceId, List<String> emails);
+
+    List<WorkspaceMember> findByWorkspaceIdAndMemberIsBotFalse(Long workspaceId);
 }

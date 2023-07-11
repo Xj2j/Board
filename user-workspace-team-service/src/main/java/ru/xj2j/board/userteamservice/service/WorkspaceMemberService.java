@@ -1,5 +1,7 @@
 package ru.xj2j.board.userteamservice.service;
 
+import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -9,6 +11,8 @@ import ru.xj2j.board.userteamservice.DTO.WorkspaceMemberDTO;
 import ru.xj2j.board.userteamservice.entity.User;
 import ru.xj2j.board.userteamservice.entity.Workspace;
 import ru.xj2j.board.userteamservice.entity.WorkspaceMember;
+import ru.xj2j.board.userteamservice.exception.InviteWorkspaceNotFoundException;
+import ru.xj2j.board.userteamservice.exception.WorkspaceMemberNotFoundException;
 import ru.xj2j.board.userteamservice.exception.WorkspaceNotFoundException;
 import ru.xj2j.board.userteamservice.repository.UserRepository;
 import ru.xj2j.board.userteamservice.repository.WorkspaceMemberRepository;
@@ -93,6 +97,26 @@ public class WorkspaceMemberService {
         member.getMember().setIsActive(memberDto.getMember().getIsActive());
         WorkspaceMember updatedMember = workspaceMemberRepository.save(member);
         return workspaceMapper.toDto(updatedMember);
+    }
+
+    public WorkspaceMemberDTO updateWorkspaceMemberRole(Long workspaceId, Long memberId, WorkspaceMemberDTO workspaceMemberDTO) throws InviteWorkspaceNotFoundException {
+        Optional<WorkspaceMember> existingMemberOptional = workspaceMemberRepository.findByIdAndWorkspaceId(memberId, workspaceId);
+        WorkspaceMember existingMember = existingMemberOptional.orElseThrow(() -> new NotFoundException("Workspace Member does not exist"));
+
+        if (existingMember.getRole().compareTo(workspaceMemberDTO.getRole()) < 0) {
+            throw new BadRequestException("You cannot update the role of a user with a higher role than yours");
+        }
+
+        // Delete related ProjectMembers
+        List<ProjectMember> projectMembers = projectMemberRepository.findByWorkspaceMember(existingMember);
+        projectMemberRepository.deleteAll(projectMembers);
+
+        // Delete related ProjectFavorites
+        List<ProjectFavorite> projectFavorites = projectFavoriteRepository.findByWorkspaceMember(existingMember);
+        projectFavoriteRepository.deleteAll(projectFavorites);
+
+        existingMember.setRole(workspaceMemberDTO.getRole());
+        return workspaceMapper.toDto(workspaceMemberRepository.save(existingMember));
     }
 
     public boolean deleteMember(Long workspaceId, Long memberId, User user) {

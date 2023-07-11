@@ -55,10 +55,10 @@ public class WorkspaceController {
         String ownerUsername = authentication.getName();
 
         try {
-            Workspace createdWorkspace = workspaceService.create(workspaceDTO, ownerUsername);
+            WorkspaceDTO createdWorkspace = workspaceService.create(workspaceDTO, ownerUsername);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdWorkspace);
-        } catch (WorkspaceAlreadyExistsException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("The workspace with the slug already exists");
+        //} catch (WorkspaceAlreadyExistsException e) {
+            //return ResponseEntity.status(HttpStatus.CONFLICT).body("The workspace with the slug already exists");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something went wrong. Please try again later.");
         }
