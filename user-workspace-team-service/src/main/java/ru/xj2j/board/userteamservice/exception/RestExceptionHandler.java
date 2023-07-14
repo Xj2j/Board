@@ -76,6 +76,24 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(TeamAlreadyExistsException.class)
+    protected ResponseEntity<Object> handleTeamAlreadyExistsEx(TeamAlreadyExistsException ex) {
+        ApiError apiError = new ApiError("Team Already Exists", ex.getMessage());
+        return new ResponseEntity<>(apiError, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(WorkspaceNotFoundException.class)
+    protected ResponseEntity<Object> handleEntityNotFoundEx(WorkspaceNotFoundException ex) {
+        ApiError apiError = new ApiError("Workspace not found", ex.getMessage());
+        return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    protected ResponseEntity<Object> handleForbiddenEx(ForbiddenException ex) {
+        ApiError apiError = new ApiError("User not a member of workspace", ex.getMessage());
+        return new ResponseEntity<>(apiError, HttpStatus.FORBIDDEN);
+    }
+
 
     /*@ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleException(Exception ex) {
