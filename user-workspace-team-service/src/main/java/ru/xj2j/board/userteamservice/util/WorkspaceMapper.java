@@ -5,10 +5,7 @@ import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.xj2j.board.userteamservice.DTO.*;
-import ru.xj2j.board.userteamservice.entity.User;
-import ru.xj2j.board.userteamservice.entity.Workspace;
-import ru.xj2j.board.userteamservice.entity.WorkspaceMember;
-import ru.xj2j.board.userteamservice.entity.WorkspaceMemberInvite;
+import ru.xj2j.board.userteamservice.entity.*;
 
 @Component
 public class WorkspaceMapper {
@@ -74,10 +71,70 @@ public class WorkspaceMapper {
             }
         });
 
+        modelMapper.addMappings(new PropertyMap<TeamMemberDTO, TeamMember>() {
+            @Override
+            protected void configure() {
+                map().setWorkspace(toEntity(source.getWorkspace()));
+            }
+        });
+
+        modelMapper.addMappings(new PropertyMap<TeamMember, TeamMemberDTO>() {
+            @Override
+            protected void configure() {
+                map().setWorkspace(toDto(source.getWorkspace()));
+            }
+        });
+
+        modelMapper.addMappings(new PropertyMap<TeamMemberDTO, TeamMember>() {
+            @Override
+            protected void configure() {
+                map().setMember(toEntity(source.getMember()));
+            }
+        });
+
+        modelMapper.addMappings(new PropertyMap<TeamMember, TeamMemberDTO>() {
+            @Override
+            protected void configure() {
+                map().setMember(toDto(source.getMember()));
+            }
+        });
+
+        modelMapper.addMappings(new PropertyMap<TeamMemberDTO, TeamMember>() {
+            @Override
+            protected void configure() {
+                map().setTeam(toEntity(source.getTeam()));
+            }
+        });
+
+        modelMapper.addMappings(new PropertyMap<TeamMember, TeamMemberDTO>() {
+            @Override
+            protected void configure() {
+                map().setTeam(toDto(source.getTeam()));
+            }
+        });
+
+        modelMapper.addMappings(new PropertyMap<TeamDTO, Team>() {
+            @Override
+            protected void configure() {
+                map().setWorkspace(toEntity(source.getWorkspace()));
+            }
+        });
+
+        modelMapper.addMappings(new PropertyMap<Team, TeamDTO>() {
+            @Override
+            protected void configure() {
+                map().setWorkspace(toDto(source.getWorkspace()));
+            }
+        });
+
     }
 
     public Workspace toEntity(WorkspaceDTO workspaceDTO) {
         return modelMapper.map(workspaceDTO, Workspace.class);
+    }
+
+    public WorkspaceDTO toDto(Workspace workspace) {
+        return modelMapper.map(workspace, WorkspaceDTO.class);
     }
 
     public WorkspaceMember toEntity(WorkspaceMemberCreateDTO workspaceMemberDTO) {
@@ -88,8 +145,8 @@ public class WorkspaceMapper {
         return modelMapper.map(workspaceMember, WorkspaceMemberDTO.class);
     }
 
-    public WorkspaceDTO toDto(Workspace workspace) {
-        return modelMapper.map(workspace, WorkspaceDTO.class);
+    public WorkspaceMember toEntity(WorkspaceMemberDTO workspaceMemberDTO) {
+        return modelMapper.map(workspaceMemberDTO, WorkspaceMember.class);
     }
 
     public User toEntity(UserDTO userDto) {
@@ -106,6 +163,22 @@ public class WorkspaceMapper {
 
     public WorkspaceMemberInviteDTO toDto(WorkspaceMemberInvite workspaceMemberInvite) {
         return modelMapper.map(workspaceMemberInvite, WorkspaceMemberInviteDTO.class);
+    }
+
+    public TeamMember toEntity(TeamMemberDTO teamMemberDTO) {
+        return modelMapper.map(teamMemberDTO, TeamMember.class);
+    }
+
+    public TeamMemberDTO toDto(TeamMember teamMember) {
+        return modelMapper.map(teamMember, TeamMemberDTO.class);
+    }
+
+    public Team toEntity(TeamDTO teamDTO) {
+        return modelMapper.map(teamDTO, Team.class);
+    }
+
+    public TeamDTO toDto(Team team) {
+        return modelMapper.map(team, TeamDTO.class);
     }
 
 }
