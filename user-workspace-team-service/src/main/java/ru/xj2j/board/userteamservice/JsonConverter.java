@@ -29,4 +29,15 @@ public class JsonConverter implements AttributeConverter<Map<String, Object>, St
             throw new IllegalArgumentException("Could not convert JSON string to map", e);
         }
     }
+
+    public String convertViewPropsToString(Map<String, Object> viewProps) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            return objectMapper.writeValueAsString(viewProps);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            // Обработка ошибки сериализации
+        }
+        return null;
+    }
 }
