@@ -30,7 +30,7 @@ public class WorkspaceController {
         try {
             WorkspaceDTO workSpace = workspaceService.getWorkspaceById(workspaceId);
             return ResponseEntity.ok(workSpace);
-        } catch (ValidationException e) {
+        } catch (WorkspaceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }

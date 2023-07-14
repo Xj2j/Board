@@ -16,16 +16,20 @@ import java.util.Optional;
 @Service
 public class WorkspaceService {
 
-    @Autowired
     private WorkspaceRepository workspaceRepository;
 
-    @Autowired
     private WorkspaceMapper workspaceMapper;
 
-    public WorkspaceDTO getWorkspaceById(Long workspaceId) throws ValidationException {
+    @Autowired
+    public WorkspaceService(WorkspaceRepository workspaceRepository, WorkspaceMapper workspaceMapper) {
+        this.workspaceRepository = workspaceRepository;
+        this.workspaceMapper = workspaceMapper;
+    }
+
+    public WorkspaceDTO getWorkspaceById(Long workspaceId) throws WorkspaceNotFoundException {
         Optional<Workspace> workspace = workspaceRepository.findById(workspaceId);
         if (workspace == null) {
-            throw new ValidationException("Workspace not found");
+            throw new WorkspaceNotFoundException("Workspace not found");
         }
 
         return workspaceMapper.toDto(workspace.get());
