@@ -18,23 +18,16 @@ public class TeamMember {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "workspace_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "workspace_id")
     private Workspace workspace;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "team_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "team_id")
     private Team team;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "member_id")
     private User member;
-
-    @Column(name = "role", nullable = false)
-    private Integer role;
-
-    @CreatedDate
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
 
     @Override
     public String toString() {
