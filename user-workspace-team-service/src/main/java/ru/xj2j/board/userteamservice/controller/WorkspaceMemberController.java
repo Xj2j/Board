@@ -11,6 +11,7 @@ import ru.xj2j.board.userteamservice.exception.InviteWorkspaceNotFoundException;
 import ru.xj2j.board.userteamservice.service.WorkspaceMemberService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/workspaces/{workspaceId}/members")
@@ -55,14 +56,26 @@ public class WorkspaceMemberController {
         return workspaceMemberService.updateWorkspaceMemberRole(workspaceId, memberId, workspaceMemberDTO);
     }
 
-    @DeleteMapping("/{memberId}")
-    public ResponseEntity<Void> deleteMember(@PathVariable Long workspaceId,
-                                             @PathVariable Long memberId,
-                                             @AuthenticationPrincipal User user) {
-        boolean deleted = workspaceMemberService.deleteMember(workspaceId, memberId, user);
-        if (deleted) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteWorkspaceMember(@PathVariable("workspaceId") Long workspaceId, @PathVariable("id") Long id, @CurrentUser User currentUser) {
+            workspaceMemberService.deleteWorkspaceMember(workspaceId, id, currentUser);
+            return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<WorkspaceMemberDTO> getWorkspaceMemberUser(@PathVariable("workspaceId") Long workspaceId, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+
+        WorkspaceMemberDTO member = workspaceMemberService.findByWorkspaceIdAndMember(workspaceId, user);
+        return ResponseEntity.ok(member);
+    }
+
+    @PostMapping
+    public ResponseEntity<Void> updateWorkspaceMemberUser(@PathVariable("workspaceId") Long workspaceId, @RequestBody Map<String, Object> viewProps, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+
+        WorkspaceMemberDTO member = workspaceMemberService.findByWorkspaceIdAndMember(workspaceId, user);
+        workspaceMemberService.updateViewProps(member, viewProps);
+        return ResponseEntity.ok().build();
     }
 }

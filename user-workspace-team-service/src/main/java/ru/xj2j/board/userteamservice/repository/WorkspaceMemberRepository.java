@@ -13,7 +13,7 @@ public interface WorkspaceMemberRepository extends JpaRepository<WorkspaceMember
 
     List<WorkspaceMember> findByWorkspaceId(Long workspaceId);
 
-    Optional<WorkspaceMember> findByIdAndWorkspaceId(Long id, Long workspaceId);
+    Optional<WorkspaceMember> findByWorkspaceIdAndId(Long workspaceId, Long id);
 
     Optional<WorkspaceMember> findByWorkspaceIdAndMember(Long workspaceId, User member);
 
@@ -22,4 +22,5 @@ public interface WorkspaceMemberRepository extends JpaRepository<WorkspaceMember
     List<WorkspaceMember> findByWorkspaceIdAndMemberEmailIn(Long workspaceId, List<String> emails);
 
     List<WorkspaceMember> findByWorkspaceIdAndMemberIsBotFalse(Long workspaceId);
+
 }
