@@ -51,6 +51,13 @@ public class UserService {
         userRepository.save(currentUser);
     }
 
+    public void deleteUserIfExist(String email) {
+        User user = userRepository.findByEmail(email).orElse(null);
+        if (user != null) {
+            userRepository.delete(user);
+        }
+    }
+
 
     /*public Page<IssueActivityDto> getUserActivity(Pageable pageable) {
         Page<IssueActivity> issueActivityPage = issueActivityRepository.findByActor(getUserId(), pageable);
