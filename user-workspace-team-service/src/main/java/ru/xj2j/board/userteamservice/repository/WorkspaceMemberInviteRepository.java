@@ -9,15 +9,16 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface InviteWorkspaceRepository extends JpaRepository<WorkspaceMemberInvite, Long> {
+public interface WorkspaceMemberInviteRepository extends JpaRepository<WorkspaceMemberInvite, Long> {
 
     Optional<WorkspaceMemberInvite> findByIdAndWorkspaceId(Long inviteId, Long workspaceId);
+
+    Optional<WorkspaceMemberInvite> findById(Long inviteId);
 
     List<WorkspaceMemberInvite> findByWorkspaceId(Long workspaceId);
 
     List<WorkspaceMemberInvite> findByEmail(String email);
 
     void deleteByWorkspace(Workspace workspace);
-
 
 }

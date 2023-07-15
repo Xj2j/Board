@@ -14,7 +14,7 @@ import ru.xj2j.board.userteamservice.exception.InviteWorkspaceNotFoundException;
 import ru.xj2j.board.userteamservice.exception.WorkspaceInviteException;
 import ru.xj2j.board.userteamservice.exception.WorkspaceNotFoundException;
 import ru.xj2j.board.userteamservice.repository.UserRepository;
-import ru.xj2j.board.userteamservice.repository.InviteWorkspaceRepository;
+import ru.xj2j.board.userteamservice.repository.WorkspaceMemberInviteRepository;
 import ru.xj2j.board.userteamservice.repository.WorkspaceMemberRepository;
 import ru.xj2j.board.userteamservice.util.WorkspaceMapper;
 
@@ -26,11 +26,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class InviteWorkspaceService {
+public class WorkspaceMemberInviteService {
 
     //private final KafkaTemplate<String, InviteRequest> kafkaTemplate;
 
-    private final InviteWorkspaceRepository inviteWorkspaceRepository;
+    private final WorkspaceMemberInviteRepository workspaceMemberInviteRepository;
 
     private final UserRepository userRepository;
 
@@ -45,14 +45,19 @@ public class InviteWorkspaceService {
     private final WorkspaceMapper workspaceMapper;
 
     @Autowired
-    public InviteWorkspaceService(InviteWorkspaceRepository workspaceMemberInviteRepository, WorkspaceMemberService workspaceMemberService, WorkspaceService workspaceService, UserRepository userRepository, WorkspaceMemberRepository workspaceMemberRepository, UserService userService, WorkspaceMapper workspaceMapper) {
-        this.inviteWorkspaceRepository = workspaceMemberInviteRepository;
+    public WorkspaceMemberInviteService(WorkspaceMemberInviteRepository workspaceMemberInviteRepository, WorkspaceMemberService workspaceMemberService, WorkspaceService workspaceService, UserRepository userRepository, WorkspaceMemberRepository workspaceMemberRepository, UserService userService, WorkspaceMapper workspaceMapper) {
+        this.workspaceMemberInviteRepository = workspaceMemberInviteRepository;
         this.workspaceMemberService = workspaceMemberService;
         this.workspaceService = workspaceService;
         this.userRepository = userRepository;
         this.workspaceMemberRepository = workspaceMemberRepository;
         this.userService = userService;
         this.workspaceMapper = workspaceMapper;
+    }
+
+    public WorkspaceMemberInvite findById(Long id) {
+        return workspaceMemberInviteRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Workspace member invite not found"));
     }
 
     @Transactional
@@ -102,7 +107,7 @@ public class InviteWorkspaceService {
             }
         }
 
-        inviteWorkspaceRepository.saveAll(workspaceInvitations);
+        workspaceMemberInviteRepository.saveAll(workspaceInvitations);
 
         // отправка приглашения в брокер
 
@@ -111,7 +116,7 @@ public class InviteWorkspaceService {
 
     @Transactional
     public void handleJoinWorkspaceRequest(Long workspaceId, Long id, String email, JoinWorkspaceRequest request) throws WorkspaceInviteException, WorkspaceNotFoundException {
-        WorkspaceMemberInvite workspaceInvite = inviteWorkspaceRepository.findByIdAndWorkspaceId(id, workspaceId).orElse(null);
+        WorkspaceMemberInvite workspaceInvite = workspaceMemberInviteRepository.findByIdAndWorkspaceId(id, workspaceId).orElse(null);
         if (workspaceInvite == null) {
             throw new WorkspaceNotFoundException("The invitation either got expired or could not be found");
         }
@@ -128,7 +133,7 @@ public class InviteWorkspaceService {
                 createWorkspaceMember(workspaceInvite.getWorkspace(), email, workspaceInvite.getRole());
             }
 
-            inviteWorkspaceRepository.save(workspaceInvite);
+            workspaceMemberInviteRepository.save(workspaceInvite);
         } else {
             throw new WorkspaceInviteException("You have already responded to the invitation request");
         }
@@ -144,12 +149,12 @@ public class InviteWorkspaceService {
             user.setLastWorkspaceId(workspace.getId());
             userRepository.save(user);
 
-            inviteWorkspaceRepository.deleteByWorkspace(workspace);
+            workspaceMemberInviteRepository.deleteByWorkspace(workspace);
         }
     }
 
     public List<WorkspaceMemberInviteDTO> getInvitationsByWorkspaceId(Long id) {
-        List<WorkspaceMemberInvite> invites = inviteWorkspaceRepository
+        List<WorkspaceMemberInvite> invites = workspaceMemberInviteRepository
                 .findByWorkspaceId(id);
 
         return invites.stream()
@@ -158,7 +163,7 @@ public class InviteWorkspaceService {
     }
 
     public void deleteInvitation(Long workspaceId, Long id) throws InviteWorkspaceNotFoundException {
-        WorkspaceMemberInvite invite = inviteWorkspaceRepository
+        WorkspaceMemberInvite invite = workspaceMemberInviteRepository
                 .findByIdAndWorkspaceId(id, workspaceId)
                 .orElseThrow(() -> new InviteWorkspaceNotFoundException("Invite will not find"));
 
@@ -166,7 +171,7 @@ public class InviteWorkspaceService {
             userService.deleteUserIfExist(invite.getEmail());
         }
 
-        inviteWorkspaceRepository.delete(invite);
+        workspaceMemberInviteRepository.delete(invite);
     }
 
     private boolean isSignupDisabled() {
@@ -174,11 +179,11 @@ public class InviteWorkspaceService {
     }
 
     public List<WorkspaceMemberInvite> getInvitationsByEmail(String email) {
-        return inviteWorkspaceRepository.findByEmail(email);
+        return workspaceMemberInviteRepository.findByEmail(email);
     }
 
     public void acceptInvitations(User user, List<Long> invitationIds) {
-        List<WorkspaceMemberInvite> workspaceInvitations = inviteWorkspaceRepository.findAllById(invitationIds);
+        List<WorkspaceMemberInvite> workspaceInvitations = workspaceMemberInviteRepository.findAllById(invitationIds);
 
         List<WorkspaceMember> workspaceMembers = workspaceInvitations.stream()
                 .map(invitation -> new WorkspaceMember(
@@ -188,7 +193,7 @@ public class InviteWorkspaceService {
                 .collect(Collectors.toList());
 
         workspaceMemberRepository.saveAll(workspaceMembers);
-        inviteWorkspaceRepository.deleteAll(workspaceInvitations);
+        workspaceMemberInviteRepository.deleteAll(workspaceInvitations);
     }
 
     /*private void validateEmail(String email) throws ValidationException {
