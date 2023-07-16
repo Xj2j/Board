@@ -8,7 +8,6 @@ import ru.xj2j.board.userteamservice.DTO.UserDTO;
 import ru.xj2j.board.userteamservice.entity.User;
 import ru.xj2j.board.userteamservice.entity.Workspace;
 import ru.xj2j.board.userteamservice.exception.UserNotFoundException;
-import ru.xj2j.board.userteamservice.openfeign.ProjectClient;
 import ru.xj2j.board.userteamservice.openfeign.ProjectMemberClient;
 import ru.xj2j.board.userteamservice.repository.UserRepository;
 import ru.xj2j.board.userteamservice.repository.WorkspaceRepository;
