@@ -8,7 +8,7 @@ import ru.xj2j.board.userteamservice.entity.IssueActivity;
 import java.time.LocalDate;
 import java.util.List;
 
-@FeignClient(name = "issue-activity-service")
+@FeignClient(name = "project-issue-service")
 public interface IssueActivityClient {
 
     @GetMapping("/api/issue-activities")

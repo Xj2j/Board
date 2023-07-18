@@ -8,14 +8,15 @@ import java.time.LocalDate;
 
 @Repository
 public interface IssueActivityRepository extends JpaRepository<IssueActivity, Long> {
-
-    @Query("SELECT new com.example.demo.dto.ActivityCount(i.createdDate, COUNT(i)) "
-            + "FROM IssueActivity i "
-            + "WHERE i.actor.username = :username "
-            + "AND i.workspace.slug = :slug "
-            + "AND i.createdAt >= :date "
-            + "GROUP BY i.createdDate "
-            + "ORDER BY i.createdDate ASC")
-    List<ActivityCount> getUserIssueActivities(@Param("slug") String slug, @Param("username") String username,
-                                               @Param("date") LocalDate date);
+    @Query("SELECT NEW com.example.IssueActivityGraphData(i.createdDate, COUNT(i)) " +
+            "FROM IssueActivity i " +
+            "WHERE i.actorId = :actorId " +
+            "AND i.workspace.workspaceId = :id " +
+            "AND i.createdAt >= :startDate " +
+            "GROUP BY i.createdDate " +
+            "ORDER BY i.createdDate")
+    List<IssueActivityGraphData> getUserActivityGraph(
+            @Param("slug") String workspaceId,
+            @Param("actorId") Long actorId,
+            @Param("startDate") LocalDate startDate);
 }
